@@ -27,8 +27,17 @@ class UserAPI:
             if uid is None or len(uid) < 2:
                 return {'message': f'User ID is missing, or is less than 2 characters'}, 400
             # look for password and dob
-            password = body.get('password')
-            dob = body.get('dob')
+
+            baths = body.get('baths')
+            if baths is None or len(baths) < 0:
+                return {'message': f'Baths is missing, or is less than 2 characters'}, 210
+            beds = body.get('beds')
+            if beds is None or len(beds) < 1:
+                return {'message': f'Beds is missing, or is less than 2 characters'}, 210
+            price = body.get('price')
+            if price is None or len(price) < 1:
+                return {'message': f'Price is missing, or is less than 2 characters'}, 210
+            
 
             ''' #1: Key code block, setup USER OBJECT '''
             uo = User(name=name, 
@@ -36,14 +45,7 @@ class UserAPI:
             
             ''' Additional garbage error checking '''
             # set password if provided
-            if password is not None:
-                uo.set_password(password)
-            # convert to date type
-            if dob is not None:
-                try:
-                    uo.dob = datetime.strptime(dob, '%Y-%m-%d').date()
-                except:
-                    return {'message': f'Date of birth format error {dob}, must be mm-dd-yyyy'}, 400
+            
             
             ''' #2: Key Code block to add user to database '''
             # create user in database
@@ -70,15 +72,13 @@ class UserAPI:
             uid = body.get('uid')
             if uid is None or len(uid) < 2:
                 return {'message': f'User ID is missing, or is less than 2 characters'}, 400
-            password = body.get('password')
+            
             
             ''' Find user '''
-            user = User.query.filter_by(_uid=uid).first()
-            if user is None or not user.is_password(password):
-                return {'message': f"Invalid user id or password"}, 400
+            
             
             ''' authenticated user '''
-            return jsonify(user.read())
+            
 
             
 

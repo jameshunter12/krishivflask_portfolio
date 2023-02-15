@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 # Define the Post class to manage actions in 'posts' table,  with a relationship to 'users' table
-class Post(db.Model):
+class House1(db.Model):
    __tablename__ = 'houses'
 
 
@@ -96,7 +96,7 @@ class Houses(db.Model):
 
 
    # Defines a relationship between User record and Notes table, one-to-many (one user to many notes)
-   posts = db.relationship("Post", cascade='all, delete', backref='users', lazy=True)
+   rents = db.relationship("rents", cascade='all, delete', backref='users', lazy=True)
 
 
    # constructor of a User object, initializes the instance variables within object (self)
@@ -203,7 +203,7 @@ class Houses(db.Model):
            "beds": self.beds,
            "baths": self.baths,
            "price": self.price,
-           "posts": [post.read() for post in self.posts]
+           "posts": [posts.read() for posts in self.posts]
        }
 
 
@@ -253,10 +253,11 @@ def initHouses():
        try:
            '''add a few 1 to 4 notes per user'''
            for num in range(randrange(1, 4)):
-               house.posts.append(Post(id=house.id, beds=house._beds, baths=house._baths ,price = house._price))
+               house.post.append(House1(id=house.id, beds=house._beds, baths=house._baths ,price = house._price))
            '''add user/post data to table'''
            house.create()
        except IntegrityError:
            '''fails with bad or duplicate data'''
            db.session.remove()
            print(f"Records exist, duplicate email, or error: {house.uid}")
+           

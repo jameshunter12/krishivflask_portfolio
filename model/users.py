@@ -19,20 +19,20 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     note = db.Column(db.Text, unique=False, nullable=False)
     image = db.Column(db.String, unique=False)
-    beds = db.Column(db.String, unique=False)
-    baths = db.Column(db.String, unique=False)
-    price = db.Column(db.String, unique=False)
+    address = db.Column(db.String, unique=False)
+    coordinates = db.Column(db.String, unique=False)
+    fun = db.Column(db.String, unique=False)
     # Define a relationship in Notes Schema to userID who originates the note, many-to-one (many notes to one user)
     userID = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     # Constructor of a Notes object, initializes of instance variables within object
-    def __init__(self, id, note, image, beds, baths, price):
+    def __init__(self, id, note, image, address, coordinates, fun):
         self.userID = id
         self.note = note
         self.image = image
-        self.beds = beds
-        self.baths = baths
-        self.price = price
+        self.address = address
+        self.coordinates = coordinates
+        self.fun = fun
 
     # Returns a string representation of the Notes object, similar to java toString()
     # returns string
@@ -65,9 +65,9 @@ class Post(db.Model):
             "id": self.id,
             "userID": self.userID,
             "note": self.note,
-            "beds": self.beds,
-            "price": self.price,
-            "baths":self.baths,
+            "address": self.address,
+            "fun": self.fun,
+            "coordinates":self.coordinates,
             "image": self.image,
             "base64": str(file_encode)
         }
@@ -85,20 +85,20 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     _name = db.Column(db.String(255), unique=False, nullable=False)
     _uid = db.Column(db.String(255), unique=True, nullable=False)
-    _price = db.Column(db.String(255), unique=False, nullable=True)
-    _beds = db.Column(db.String(255), unique=False, nullable=False)
-    _baths = db.Column(db.String(255), unique=False, nullable=False)
+    _fun = db.Column(db.String(255), unique=False, nullable=True)
+    _address = db.Column(db.String(255), unique=False, nullable=False)
+    _coordinates = db.Column(db.String(255), unique=False, nullable=False)
 
     # Defines a relationship between User record and Notes table, one-to-many (one user to many notes)
     posts = db.relationship("Post", cascade='all, delete', backref='users', lazy=True)
 
     # constructor of a User object, initializes the instance variables within object (self)
-    def __init__(self, name, uid, beds, baths, price):
+    def __init__(self, name, uid, address, coordinates, fun):
         self._name = name    # variables with self prefix become part of the object, 
         self._uid = uid
-        self._beds = beds
-        self._baths = baths
-        self._price = price
+        self._address = address
+        self._coordinates = coordinates
+        self._fun = fun
 
     # a name getter method, extracts name from object
     @property
@@ -125,40 +125,40 @@ class User(db.Model):
         return self._uid == uid
    
     @property
-    def beds(self):
-       return self._beds
+    def address(self):
+       return self._address
   
-    @beds.setter
-    def beds(self, beds):
-       self._beds = beds
+    @address.setter
+    def address(self, address):
+       self._address = address
 
 
-    def is_beds(self, beds):
-       return self._beds == beds
+    def is_address(self, address):
+       return self._address == address
     
     @property
-    def baths(self):
-       return self._baths
+    def coordinates(self):
+       return self._coordinates
   
-    @baths.setter
-    def baths(self, baths):
-       self._baths = baths
+    @coordinates.setter
+    def coordinates(self, coordinates):
+       self._coordinates = coordinates
 
 
-    def is_baths(self, baths):
-        return self._baths == baths
+    def is_coordinates(self, coordinates):
+        return self._coordinates == coordinates
     
     @property
-    def price(self):
-       return self._price
+    def fun(self):
+       return self._fun
   
-    @price.setter
-    def price(self, price):
-       self._price = price
+    @fun.setter
+    def fun(self, fun):
+       self._fun = fun
 
 
-    def is_baths(self, price):
-       return self._price == price
+    def is_fun(self, fun):
+       return self._fun == fun
   
 
     
@@ -186,26 +186,26 @@ class User(db.Model):
             "id": self.id,
             "name": self.name,
             "uid": self.uid,
-            "beds": self.beds,
-            "baths": self.baths,
-            "price": self.price,
+            "address": self.address,
+            "coordinates": self.coordinates,
+            "fun": self.fun,
             "posts": [post.read() for post in self.posts]
         }
 
     # CRUD update: updates user name, password, phone
     # returns self
-    def update(self, name="", uid="", beds="", baths="", price=""):
+    def update(self, name="", uid="", address="", coordinates="", fun=""):
         """only updates values with length"""
         if len(name) > 0:
             self.name = name
         if len(uid) > 0:
             self.uid = uid
-        if len(beds) > 0:
-           self.beds = beds
-        if len (baths) > 0:
-           self.baths = baths 
-        if len(price) > 0:
-           self.price = price    
+        if len(address) > 0:
+           self.address = address
+        if len (coordinates) > 0:
+           self.coordinates = coordinates 
+        if len(fun) > 0:
+           self.fun = fun    
         db.session.commit()
         return self
 
@@ -227,13 +227,12 @@ def initUsers():
         db.init_app(app)
         db.create_all()
         """Tester data for table"""
-        u1 = User(name='Thomas Edison', uid='toby', beds='four', baths='three', price='500$/night')
-        u2 = User(name='Nicholas Tesla', uid='niko', beds='four', baths='three', price='500$/night')
-        u3 = User(name='Alexander Graham Bell', uid='lex', beds='four', baths='three', price='500$/night')
-        u4 = User(name='Eli Whitney', uid='whit', beds='four', baths='three', price='500$/night')
-        u5 = User(name='John Mortensen', uid='jm1021', beds='four', baths='three', price='500$/night')
+        u1 = User(name='Daves Hot Chicken', uid='h1', address = '1268 Auto Park Way, Escondido, CA 92029', coordinates = 'lat: 33.158350, lng: -117.032630', fun='8/10')
+        u2 = User(name='Raising Canes', uid='h2', address = '8223 Mira Mesa Blvd, San Diego, CA 92126', coordinates = 'lat: 32.912239, lng: -117.147217', fun='10/10')
+        u3 = User(name='Belmont Park', uid='h3', address = '3146 Mission Blvd, San Diego, CA 92109', coordinates = 'lat: 32.769939, lng: -117.251091', fun='7/10')
+        u4 = User(name='Potato Chip Rock', uid='h4', address = 'Ramona, CA 92065', coordinates = 'lat: 33.010290, lng: -116.947480', fun='6/10')
 
-        users = [u1, u2, u3, u4, u5]
+        users = [u1, u2, u3, u4]
 
         """Builds sample user/note(s) data"""
         for user in users:
@@ -241,7 +240,7 @@ def initUsers():
                 '''add a few 1 to 4 notes per user'''
                 for num in range(randrange(1, 4)):
                     note = "#### " + user.name + " note " + str(num) + ". \n Generated by test data."
-                    user.posts.append(Post(id=user.id, note=note, beds=note, price=note, baths=note, image='ncs_logo.png'))
+                    user.posts.append(Post(id=user.id, note=note, address=note, fun=note, coordinates=note, image='ncs_logo.png'))
                 '''add user/post data to table'''
                 user.create()
             except IntegrityError:

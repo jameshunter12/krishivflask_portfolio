@@ -2,15 +2,15 @@ from flask import Blueprint, request, jsonify
 from flask_restful import Api, Resource # used for REST API building
 from datetime import datetime
 
-from model.housepick import Houses
+from model.activitypick import activities
 
-house_api = Blueprint('house_api', __name__,
-                   url_prefix='/api/houses')
+activity_api = Blueprint('activity_api', __name__,
+                   url_prefix='/api/activities')
 
 # API docs https://flask-restful.readthedocs.io/en/latest/api.html
-api = Api(house_api)
+api = Api(activity_api)
 
-class HouseAPI:        
+class activityAPI:        
     class _Create(Resource):
         def rents(self):
             ''' Read data for json body '''
@@ -26,20 +26,20 @@ class HouseAPI:
             if uid is None or len(uid) < 2:
                 return {'message': f'User ID is missing, or is less than 2 characters'}, 210
             # look for password and dob
-            baths = body.get('baths')
-            if baths is None or len(baths) < 0:
-                return {'message': f'Baths is missing, or is less than 2 characters'}, 210
-            beds = body.get('beds')
-            if beds is None or len(beds) < 1:
-                return {'message': f'Beds is missing, or is less than 2 characters'}, 210
-            price = body.get('price')
-            if price is None or len(price) < 1:
-                return {'message': f'Price is missing, or is less than 2 characters'}, 210
+            address = body.get('address')
+            if address is None or len(address) < 0:
+                return {'message': f'address is missing, or is less than 2 characters'}, 210
+            coordinates = body.get('coordinates')
+            if coordinates is None or len(coordinates) < 1:
+                return {'message': f'coordinates is missing, or is less than 2 characters'}, 210
+            fun = body.get('fun')
+            if fun is None or len(fun) < 1:
+                return {'message': f'fun is missing, or is less than 2 characters'}, 210
             
     
 
             ''' #1: Key code block, setup USER OBJECT '''
-            uo = Houses(name=name, 
+            uo = activities(name=name, 
                       uid=uid)
             
             ''' Additional garbage error checking '''
@@ -47,17 +47,17 @@ class HouseAPI:
             
             ''' #2: Key Code block to add user to database '''
             # create user in database
-            house = uo.create()
+            activity = uo.create()
             # success returns json of user
-            if house:
-                return jsonify(house.read())
+            if activity:
+                return jsonify(activity.read())
             # failure returns error
             return {'message': f'Processed {name}, either a format error or User ID {uid} is duplicate'}, 210
 
     class _Read(Resource):
         def get(self):
-            Houses = Houses.query.all()    # read/extract all users from database
-            json_ready = [Houses.read() for users in Houses]  # prepare output in json
+            activities = activities.query.all()    # read/extract all users from database
+            json_ready = [activities.read() for users in activities]  # prepare output in json
             return jsonify(json_ready)  # jsonify creates Flask response object, more specific to APIs than json.dumps
 
     # class _Security(Resource):
@@ -70,11 +70,11 @@ class HouseAPI:
             uid = body.get('uid')
             if uid is None or len(uid) < 2:
                 return {'message': f'User ID is missing, or is less than 2 characters'}, 400
-            baths = body.get('baths')
+            address = body.get('address')
             
             ''' Find user '''
-            user = Houses.query.filter_by(_uid=uid).first()
-            if user is None or not user.is_baths(baths):
+            user = activities.query.filter_by(_uid=uid).first()
+            if user is None or not user.is_address(address):
                 return {'message': f"Invalid user id or password"}, 400
             
             ''' authenticated user '''

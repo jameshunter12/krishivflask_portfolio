@@ -189,7 +189,7 @@ class User(db.Model):
             "address": self.address,
             "coordinates": self.coordinates,
             "fun": self.fun,
-            "posts": [post.read() for post in self.posts]
+            #"posts": [post.read() for post in self.posts]
         }
 
     # CRUD update: updates user name, password, phone

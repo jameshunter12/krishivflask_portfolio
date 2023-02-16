@@ -29,15 +29,15 @@ class UserAPI:
                 return {'message': f'User ID is missing, or is less than 2 characters'}, 400
             # look for password and dob
 
-            baths = body.get('baths')
-            if baths is None or len(baths) < 0:
-                return {'message': f'Baths is missing, or is less than 2 characters'}, 210
-            beds = body.get('beds')
-            if beds is None or len(beds) < 1:
-                return {'message': f'Beds is missing, or is less than 2 characters'}, 210
-            price = body.get('price')
-            if price is None or len(price) < 1:
-                return {'message': f'Price is missing, or is less than 2 characters'}, 210
+            address = body.get('address')
+            if address is None or len(address) < 0:
+                return {'message': f'address is missing, or is less than 2 characters'}, 210
+            coordinates = body.get('coordinates')
+            if coordinates is None or len(coordinates) < 1:
+                return {'message': f'coordinates is missing, or is less than 2 characters'}, 210
+            fun = body.get('fun')
+            if fun is None or len(fun) < 1:
+                return {'message': f'fun is missing, or is less than 2 characters'}, 210
             
 
             ''' #1: Key code block, setup USER OBJECT '''

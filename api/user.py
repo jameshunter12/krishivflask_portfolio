@@ -5,6 +5,7 @@ from datetime import datetime
 
 from model.users import User
 
+
 user_api = Blueprint('user_api', __name__,
                    url_prefix='/api/users')
 
@@ -86,4 +87,6 @@ class UserAPI:
     api.add_resource(_Create, '/create')
     api.add_resource(_Read, '/')
     api.add_resource(_Security, '/authenticate')
+
+    
     

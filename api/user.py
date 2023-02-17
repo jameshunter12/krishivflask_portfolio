@@ -42,7 +42,10 @@ class UserAPI:
 
             ''' #1: Key code block, setup USER OBJECT '''
             uo = User(name=name, 
-                      uid=uid)
+                      uid=uid,
+                      address=address,
+                      coordinates=coordinates,
+                      fun=fun)
             
             ''' Additional garbage error checking '''
             # set password if provided

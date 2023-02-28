@@ -60,9 +60,9 @@ class activityAPI:
             json_ready = [activities.read() for users in activities]  # prepare output in json
             return jsonify(json_ready)  # jsonify creates Flask response object, more specific to APIs than json.dumps
 
-    # class _Security(Resource):
+    class _Security(Resource):
 
-        # def post(self):
+        def post(self):
             ''' Read data for json body '''
             body = request.get_json()
             
@@ -71,7 +71,7 @@ class activityAPI:
             if uid is None or len(uid) < 2:
                 return {'message': f'User ID is missing, or is less than 2 characters'}, 400
             address = body.get('address')
-            
+
             ''' Find user '''
             user = activities.query.filter_by(_uid=uid).first()
             if user is None or not user.is_address(address):
